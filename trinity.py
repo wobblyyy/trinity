@@ -85,8 +85,6 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
 
 
 
-# https://x.com/retro_twt/status/1724245812467699920?s=20
-# fixupx
 
 
 # ghetto token protection
@@ -95,7 +93,7 @@ token = tokenFile.readline()
 tokenFile.close()
 bot.run(token)
 
-#command just for me
+# command just for me?
 # @client.command()
 # @commands.is_owner()
 # async def say(ctx, *, message):
