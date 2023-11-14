@@ -15,7 +15,6 @@
 import discord
 from discord import option
 import os
-import glob
 
 
 
@@ -73,9 +72,12 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
     finalurl = videourl[0]
     video_download = 'yt-dlp -S "+codec:h264" --trim-filename 10 -o "video.%(ext)s" ' + finalurl
     os.system(video_download)
-    filename = glob.glob(os.path.join('video' + '.*'))[0] # who knows what file type ytdlp will give us?
-    filesize = os.path.getsize(filename)
     await ctx.respond(f"Downloading...")
+    filename = 'video.mp4'
+    if not os.path.exists('video.mp4'):
+        await ctx.edit(content=f'Unable to download video as mp4')
+    # filesize = os.path.getsize(filename)
+    # will use this later to predict if a file will not work
     try:
         await ctx.edit(file=discord.File(filename))
         await ctx.edit(content=f'Done!')
