@@ -15,7 +15,7 @@
 import discord
 from discord import option
 import os
-
+import glob
 
 
 intents = discord.Intents.all()
@@ -30,20 +30,19 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
     if message.content.startswith('https://x.com'):
         newURL = str(message.content)
         fixedMessageAuthor = str(message.author).split("#")
         newURL = f'{fixedMessageAuthor[0]}: ' + message.content.replace('x.com', 'fixupx.com', 1)
-        await message.channel.send(f"{newURL}")
+        await message.channel.send(f"{newURL}", reference=message)
 
     if message.content.startswith('https://twitter.com'):
-        print('success')
         newURL = str(message.content)
         fixedMessageAuthor = str(message.author).split("#")
         newURL = f'{fixedMessageAuthor[0]}: ' + message.content.replace('twitter.com', 'fxtwitter.com', 1)
-        await message.channel.send(f"{newURL}")
+        await message.channel.send(f"{newURL}", reference=message)
 
 #
 # slash command to fix twitter urls
@@ -64,23 +63,27 @@ async def on_message(message):
 # so doing it manual
 #
 
-@bot.slash_command(name="videodownloader", description="Downloads videos (no tiktok watermarks, either)", guild_ids= [629023030147809282, 1163315129799163974])
+@bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)", guild_ids= [629023030147809282, 1163315129799163974])
 async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOptionType.string)):
-
+    await ctx.defer()
     videourl = videourl.split()
     # remove anyone trying to sneak in a command, I think?
     finalurl = videourl[0]
     video_download = 'yt-dlp -S "+codec:h264" --trim-filename 10 -o "video.%(ext)s" ' + finalurl
-    os.system(video_download)
-    await ctx.respond(f"Downloading...")
-    filename = 'video.mp4'
-    if not os.path.exists('video.mp4'):
-        await ctx.edit(content=f'Unable to download video as mp4')
+
+    try:
+        # await ctx.respond(f"Downloading...")
+        os.system(video_download)
+    except:
+        await ctx.edit(f"Unable to download")
+         # await ctx.followup.send(f"Unable to download")
+    filename = glob.glob(os.path.join('video' + '.*'))[0]
     # filesize = os.path.getsize(filename)
-    # will use this later to predict if a file will not work
+    # will use this later maybe
     try:
         await ctx.edit(file=discord.File(filename))
-        await ctx.edit(content=f'Done!')
+        # await ctx.edit(content=f'-------------------------------')
+        await ctx.followup.send(f'Done!')
     except:
         await ctx.edit(content=f"Uploading failed :( (File too big?)")
     os.remove(filename) # cleanup!
