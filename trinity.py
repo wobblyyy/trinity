@@ -15,13 +15,24 @@
 import os
 import glob
 import discord
+import random
 
 bot = discord.Bot(intents=discord.Intents.all())
+
+
+oppenheimerLinks = ['https://tenor.com/view/oppenheimer-stare-gif-9585562966608025312',
+                    'https://tenor.com/view/oppenheimer-starring-then-closing-his-eyes-oppenheimer-oppenheimer-movie-j-robert-oppenheimer-robert-oppenheimer-gif-11256978878629275100',
+                    'https://tenor.com/view/oppenheimer-cillian-murphy-movie-scared-horrified-gif-3257036184702814746',
+                    'https://tenor.com/view/oppenheimer-cillian-murphy-cillian-murphy-peaky-blinders-gif-1787947313354313976',
+                    'https://tenor.com/view/oppenheimer-oppenheimer-movie-walk-walking-gif-3311223081607307352'
+                    ]
 
 
 @bot.event
 async def on_ready():
     print(f'{bot.user} logged in')
+
+
 
 
 @bot.event
@@ -42,8 +53,12 @@ async def on_message(message):
 
     # well...
 
+    if 'oppenheimer' in message.content.lower():
+        await message.channel.send(oppenheimerLinks[random.randint(0, 4)])
+
     if "male wife" in message.content.lower():
         await message.channel.send(f"my beloved...")
+
     if bot.user.mentioned_in(message):
         ## if str(message.author) != f'.wabbit#0':
         if message.author.id != 87548407685607424:
@@ -57,7 +72,7 @@ async def on_message(message):
             await message.channel.send(f'hello my love')
 
 
-@bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)",    #     DOUBLE CHECK GUILDS WHEN PUSHING
+@bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)",
                    guild_ids=[629023030147809282, 1163315129799163974])
 async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOptionType.string)):
     await ctx.defer()
@@ -80,7 +95,6 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
         print(f'Something went wrong')
     os.remove(filename)  # cleanup!
     print(f'Finished')
-
 
 
 
