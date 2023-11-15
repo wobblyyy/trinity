@@ -47,14 +47,17 @@ async def on_message(message):
     if bot.user.mentioned_in(message):
         ## if str(message.author) != f'.wabbit#0':
         if message.author.id != 87548407685607424:
-            await message.channel.send(f"sorry, I don't talk to strangers")
+            if "love" in message.content.lower():
+                await message.channel.send(f"ew...")
+            else:
+                await message.channel.send(f"sorry, I don't talk to strangers")
         elif "love" in message.content.lower():
             await message.channel.send(f':3')
         else:
             await message.channel.send(f'hello my love')
 
 
-@bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)",
+@bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)",    #     DOUBLE CHECK GUILDS WHEN PUSHING
                    guild_ids=[629023030147809282, 1163315129799163974])
 async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOptionType.string)):
     await ctx.defer()
@@ -79,8 +82,12 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
     print(f'Finished')
 
 
+
+
+
 # ghetto token protection
 tokenFile = open('token.txt', 'r')
 token = tokenFile.readline()
 tokenFile.close()
 bot.run(token)
+
