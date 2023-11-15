@@ -55,7 +55,7 @@ async def on_message(message):
 
 
 @bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)",
-                   guild_ids=[739626731219976253])
+                   guild_ids=[629023030147809282, 1163315129799163974])
 async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOptionType.string)):
     await ctx.defer()
 
