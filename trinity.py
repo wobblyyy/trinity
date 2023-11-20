@@ -17,15 +17,15 @@ import glob
 import discord
 import random
 
+
+
+# trinity_egg contains variables for printing
+# easter eggs so I can share trinity without spoiling anything ;)
+
+from trinity_egg import *
+
 bot = discord.Bot(intents=discord.Intents.all())
 
-
-oppenheimerLinks = ['https://tenor.com/view/oppenheimer-stare-gif-9585562966608025312',
-                    'https://tenor.com/view/oppenheimer-starring-then-closing-his-eyes-oppenheimer-oppenheimer-movie-j-robert-oppenheimer-robert-oppenheimer-gif-11256978878629275100',
-                    'https://tenor.com/view/oppenheimer-cillian-murphy-movie-scared-horrified-gif-3257036184702814746',
-                    'https://tenor.com/view/oppenheimer-cillian-murphy-cillian-murphy-peaky-blinders-gif-1787947313354313976',
-                    'https://tenor.com/view/oppenheimer-oppenheimer-movie-walk-walking-gif-3311223081607307352'
-                    ]
 
 
 @bot.event
@@ -51,25 +51,25 @@ async def on_message(message):
         newURL = f'{fixedMessageAuthor[0]}: ' + newURL.replace('twitter.com', 'fxtwitter.com', 1)
         await message.channel.send(f"{newURL}", reference=message)
 
-    # well...
+    # these eggs could be changed into function calls, probably
 
-    if 'oppenheimer' in message.content.lower():
-        await message.channel.send(oppenheimerLinks[random.randint(0, 4)])
+    if egg1 in message.content.lower():
+        await message.channel.send(egg1Links[random.randint(0, 4)])
 
-    if "male wife" in message.content.lower():
-        await message.channel.send(f"my beloved...")
+    if egg2dot1 in message.content.lower():
+        await message.channel.send(egg2dot2)
 
     if bot.user.mentioned_in(message):
         ## if str(message.author) != f'.wabbit#0':
         if message.author.id != 87548407685607424:
-            if "love" in message.content.lower():
-                await message.channel.send(f"ew...")
+            if egg3dot1 in message.content.lower():
+                await message.channel.send(egg3dot2)
             else:
-                await message.channel.send(f"sorry, I don't talk to strangers")
-        elif "love" in message.content.lower():
-            await message.channel.send(f':3')
+                await message.channel.send(egg3dot3)
+        elif egg3dot1 in message.content.lower():
+            await message.channel.send(egg3dot4)
         else:
-            await message.channel.send(f'hello my love')
+            await message.channel.send(egg3dot5)
 
 
 @bot.slash_command(name="downloadvideo", description="Downloads videos (no tiktok watermarks, either)",
@@ -86,22 +86,24 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
     filename = glob.glob(os.path.join('video2' + '.*'))[0]
     # filesize = os.path.getsize(filename)
     # will use this later maybe
-
-    try:
-        await ctx.send(file=discord.File(filename))
-        await ctx.edit(content=f'Done')
-    except:
-        await ctx.edit(content=f"Uploading failed :( (File too big?)")
-        print(f'Something went wrong')
+    if os.path.exists(filename):
+        try:
+            await ctx.send(file=discord.File(filename))
+            await ctx.edit(content=f'Done')
+        except:
+            await ctx.edit(content=f"Uploading failed :( (File too big?)")
+            print(f'Something went wrong')
+    else:
+        await ctx.edit(content=f'ytdlp failed :(')
     os.remove(filename)  # cleanup!
     print(f'Finished')
 
 
 
 
-# ghetto token protection
+
+# token protection lol
 tokenFile = open('token.txt', 'r')
 token = tokenFile.readline()
 tokenFile.close()
 bot.run(token)
-
