@@ -81,12 +81,15 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
     finalurl = videourl[0]
     print(f'Downloading {finalurl}')
     video_download = 'yt-dlp -S "+codec:h264" -o "video2.%(ext)s" ' + finalurl
-    os.system(video_download)
-    print(f'Downloaded.')
-    filename = glob.glob(os.path.join('video2' + '.*'))[0]
+    try:
+        os.system(video_download)
+        filename = glob.glob(os.path.join('video2' + '.*'))[0]
+    except:
+        await ctx.edit(content=f'ytdlp failed :(')
     # filesize = os.path.getsize(filename)
     # will use this later maybe
     if os.path.exists(filename):
+        print(f'Downloaded.')
         try:
             await ctx.send(file=discord.File(filename))
             await ctx.edit(content=f'Done')
@@ -94,7 +97,7 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
             await ctx.edit(content=f"Uploading failed :( (File too big?)")
             print(f'Something went wrong')
     else:
-        await ctx.edit(content=f'ytdlp failed :(')
+        await ctx.edit(content=f'ytdlp failed v2 :( (?)')
     os.remove(filename)  # cleanup!
     print(f'Finished')
 
