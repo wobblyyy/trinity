@@ -8,7 +8,6 @@
 #
 
 
-
 # https://github.com/Pycord-Development/pycord/releases
 # py-cord 2.4.1
 #
@@ -16,8 +15,6 @@ import os
 import glob
 import discord
 import random
-
-
 
 # trinity_egg contains variables for printing
 # easter eggs so I can share trinity without spoiling anything ;)
@@ -27,12 +24,9 @@ from trinity_egg import *
 bot = discord.Bot(intents=discord.Intents.all())
 
 
-
 @bot.event
 async def on_ready():
     print(f'{bot.user} logged in')
-
-
 
 
 @bot.event
@@ -78,32 +72,33 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
     await ctx.defer()
 
     videourl = videourl.split()  # remove anyone trying to sneak in a command, I think?
-    finalurl = videourl[0]
+    finalurl = '"' + videourl[0] + '"'
+    # perhaps throw some more checks in here later to make sure an actual url was provided
     print(f'Downloading {finalurl}')
-    video_download = 'yt-dlp -S "+codec:h264" -o "video2.%(ext)s" ' + finalurl
+
+    # unique filenames :D
+    video_identifier = 'trinity_' + str(random.randint(10000000, 99999999))
+    video_download = f'yt-dlp -S "+codec:h264" -o "{video_identifier}.%(ext)s" ' + finalurl
     try:
         os.system(video_download)
-        filename = glob.glob(os.path.join('video2' + '.*'))[0]
+        filename = glob.glob(os.path.join(video_identifier + '.*'))[0]
     except:
         await ctx.edit(content=f'ytdlp failed :(')
     # filesize = os.path.getsize(filename)
     # will use this later maybe
+
     if os.path.exists(filename):
         print(f'Downloaded.')
         try:
-            await ctx.send(file=discord.File(filename))
-            await ctx.edit(content=f'Done')
+            await ctx.respond(file=discord.File(filename))
+            # await ctx.edit(content=f'Done')
         except:
             await ctx.edit(content=f"Uploading failed :( (File too big?)")
             print(f'Something went wrong')
     else:
-        await ctx.edit(content=f'ytdlp failed v2 :( (?)')
+        await ctx.edit(content=f'ytdlp failed :(')
     os.remove(filename)  # cleanup!
     print(f'Finished')
-
-
-
-
 
 # token protection lol
 tokenFile = open('token.txt', 'r')
