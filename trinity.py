@@ -100,6 +100,17 @@ async def video_downloads(ctx, videourl: discord.Option(discord.SlashCommandOpti
     os.remove(filename)  # cleanup!
     print(f'Finished')
 
+
+# oooooo a ghost
+@bot.slash_command(guild_ids=[629023030147809282, 1163315129799163974])
+async def self(ctx, input):
+    await ctx.defer(ephemeral=True)
+    if ctx.author.id != 87548407685607424:
+        await ctx.respond('not for you i am afraid')
+    else:
+        await ctx.send(str(input))
+        await ctx.respond('!')
+
 # token protection lol
 tokenFile = open('token.txt', 'r')
 token = tokenFile.readline()
